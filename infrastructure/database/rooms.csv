@@ -1,0 +1,26 @@
+id_hotel,id_room,floor,room_type,daily_rate
+1,101,1,Double Room,200.0
+1,102,1,Double Room,200.0
+1,103,1,Double Room,200.0
+1,104,1,Double Room,200.0
+1,105,1,Double Room,200.0
+1,201,2,Double Room,200.0
+1,202,2,Double Room,200.0
+1,203,2,Double Room,200.0
+1,204,2,Double Room,200.0
+1,205,2,Double Room,200.0
+1,301,3,Double Room,200.0
+1,302,3,Double Room,200.0
+1,303,3,Double Room,200.0
+1,304,3,Double Room,200.0
+1,305,3,Double Room,200.0
+1,401,4,Double Room,200.0
+1,402,4,Double Room,200.0
+1,403,4,Double Room,200.0
+1,404,4,Double Room,200.0
+1,405,4,Double Room,200.0
+1,501,5,Double Room,200.0
+1,502,5,Double Room,200.0
+1,503,5,Double Room,200.0
+1,504,5,Double Room,200.0
+1,505,5,Double Room,200.0

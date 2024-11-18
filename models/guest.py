@@ -1,5 +1,4 @@
 class Guest():
-
     def create_guest():
         pass
     def update_guest():

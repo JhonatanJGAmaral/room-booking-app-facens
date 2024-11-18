@@ -1,22 +1,50 @@
-from utils.utils import Utils
+from models.room import Room
 
 class Hotel():
+    def __init__(self, id, name, address, total_floors, 
+                 rooms_per_floor, default_room_type, default_price):
+        self.__id = id
+        self.__name = name
+        self.__address = address
+        self.__total_floors = total_floors
+        self.__rooms_per_floor = rooms_per_floor
+        self.__total_rooms = total_floors * rooms_per_floor
+        self.__default_rooms = self.__generate_rooms(default_room_type,
+                                                     default_price)
 
-    def __init__(self, id_hotel, nome_hotel, endereco_hotel, quantidade_andar, quarto_por_andar):
-        self.__id_hotel = id_hotel
-        self.__nome_hotel = nome_hotel
-        self.__endereco_hotel = endereco_hotel
-        self.__quantidade_andar = quantidade_andar
-        self.__quarto_por_andar = quarto_por_andar
-        self.__total_quarto = quantidade_andar * quarto_por_andar
-        
-        self.__utils = Utils()
+    @property
+    def id(self):
+        return self.__id
 
-    def update_hotel(self):
-        pass
+    @property
+    def name(self):
+        return self.__name
+    
+    @property
+    def address(self):
+        return self.__address
 
-    def delete_hotel(self):
-        pass
+    @property
+    def total_floors(self):
+        return self.__total_floors
 
-    def read_hotel(self):
-        pass
+    @property
+    def rooms_per_floor(self):
+        return self.__rooms_per_floor
+
+    @property
+    def total_rooms(self):
+        return self.__total_rooms
+
+    @property
+    def default_rooms(self):
+        return self.__default_rooms
+    
+    def __generate_rooms(self, default_room_type, default_price):
+        list_of_rooms = []
+        for floor_idx in range(1, self.__total_floors + 1):
+            for room_idx in range(1, self.__rooms_per_floor + 1):
+                room_id = f'{floor_idx}0{room_idx}'
+                room = Room(self.id, room_id, floor_idx, default_room_type, default_price)
+                list_of_rooms.append(room)
+        return list_of_rooms
