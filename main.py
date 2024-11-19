@@ -69,7 +69,7 @@ if __name__ == '__main__':
                     # () create the room (and update its table)
                     # () update the hotel
                     chosen_hotel = hotel_service.choose_hotel()
-
+                    # ...
                     pass
                 elif hotel_op == '4':
                     pass

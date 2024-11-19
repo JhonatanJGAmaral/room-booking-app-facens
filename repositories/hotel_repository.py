@@ -9,7 +9,7 @@ class HotelRepository():
 
     def save(self, hotel: Hotel):
         if self.hotel_exists(hotel):
-            print(f'The hotel \'{hotel.name}\' in \'{hotel.address}\' address has been already registered.')
+            print(f'The hotel \'{hotel.name}\' at \'{hotel.address}\' address has been already registered.')
             return False
 
         hotel_dict = self.__hotel_to_dict(hotel)
@@ -20,7 +20,7 @@ class HotelRepository():
         for room in hotel.default_rooms:
             dummy = self.__room_repository.save(room)
 
-        print(f'\nHotel {hotel.name} successfully created.')      
+        print(f'\nHotel \"{hotel.name}\" successfully created.')      
         return True
 
     def update_hotel(self):
