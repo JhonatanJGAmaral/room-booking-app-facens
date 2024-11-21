@@ -9,7 +9,7 @@ class HotelRepository():
 
     def save(self, hotel: Hotel):
         if self.hotel_exists(hotel):
-            print(f'The hotel \'{hotel.name}\' at \'{hotel.address}\' address has been already registered.')
+            print(f'\nO hotel \'{hotel.name}\' no endereço \'{hotel.address}\' já foi cadastrado.')
             return False
 
         hotel_dict = self.__hotel_to_dict(hotel)
@@ -19,7 +19,7 @@ class HotelRepository():
         # create rooms
         for room in hotel.default_rooms:
             dummy = self.__room_repository.save(room)
-
+        
         print(f'\nHotel \"{hotel.name}\" successfully created.')      
         return True
 
@@ -29,9 +29,9 @@ class HotelRepository():
     def update_hotel(self, hotel_df):
         self.__utils.write_file('hotels', hotel_df, 'w')
 
-    def delete_hotel(self, id=None, name='', address=''):
+    def delete_hotel(self, hotel_id=None, name='', address=''):
         df = self.read_hotel()
-        new_df = df[df['id'] != id] if id else df[~((df['name'] == name) & (df['address'] == address))]
+        new_df = df[df['hotel_id'] != hotel_id] if hotel_id else df[~((df['name'] == name) & (df['address'] == address))]
         self.update_hotel(new_df)
 
     def hotel_exists(self, hotel):
@@ -42,7 +42,7 @@ class HotelRepository():
             return False
 
     def __hotel_to_dict(self, hotel):
-        hotel_data = {'id': hotel.id,
+        hotel_data = {'hotel_id': hotel.hotel_id,
                       'name': hotel.name,
                       'address': hotel.address,
                       'total_floors': hotel.total_floors,

@@ -15,3 +15,7 @@ class RoomService():
         rooms_df = self.__room_repository.read_room()
         for room_id in rooms_df.loc[rooms_df['hotel_id']==hotel_id, 'room_id']:
             self.__room_repository.delete_room(hotel_id, room_id)
+
+    def remove_room(self, hotel_id, room_id):
+        self.__room_repository.delete_room(hotel_id, room_id)
+    

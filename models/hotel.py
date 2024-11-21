@@ -1,9 +1,9 @@
 from models.room import Room
 
 class Hotel():
-    def __init__(self, id, name, address, total_floors, 
+    def __init__(self, hotel_id, name, address, total_floors, 
                  rooms_per_floor, default_room_type, default_price):
-        self.__id = id
+        self.__hotel_id = hotel_id
         self.__name = name
         self.__address = address
         self.__total_floors = total_floors
@@ -13,8 +13,8 @@ class Hotel():
                                                      default_price)
 
     @property
-    def id(self):
-        return self.__id
+    def hotel_id(self):
+        return self.__hotel_id
 
     @property
     def name(self):
@@ -45,6 +45,6 @@ class Hotel():
         for floor_idx in range(1, self.__total_floors + 1):
             for room_idx in range(1, self.__rooms_per_floor + 1):
                 room_id = f'{floor_idx}0{room_idx}'
-                room = Room(self.id, room_id, floor_idx, default_room_type, default_price)
+                room = Room(self.hotel_id, room_id, floor_idx, default_room_type, default_price)
                 list_of_rooms.append(room)
         return list_of_rooms

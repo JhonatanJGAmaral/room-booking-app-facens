@@ -18,21 +18,21 @@ class HotelService():
         return df[column_key].iloc[-1] if not df.empty else 0
 
     def generate_id(self):
-        return self.get_last_column_val('id') + 1
+        return self.get_last_column_val('hotel_id') + 1
 
     def create_and_save_hotel(self, name, address, total_floors,
                               rooms_per_floor, default_room_type, default_price):
-        id = self.generate_id()  
-        hotel = Hotel(id, name, address, total_floors, rooms_per_floor, default_room_type, default_price) 
+        hotel_id = self.generate_id()  
+        hotel = Hotel(hotel_id, name, address, total_floors, rooms_per_floor, default_room_type, default_price) 
         return self.__hotel_repository.save(hotel) 
 
     def get_hotels_and_addresses(self):
         df = self.__hotel_repository.read_hotel()
         if df.empty:
-            print('\n\t< There are no registered hotels >')
+            print('\n\t< Não há hotéis registrados >')
             return pd.DataFrame()
         else:
-            return df[['id', 'name', 'address']]
+            return df[['hotel_id', 'name', 'address']]
 
     def choose_hotel(self):
         hotels_df = self.get_hotels_and_addresses()
@@ -40,12 +40,12 @@ class HotelService():
             return pd.DataFrame()
         else:
             print(f'\n{hotels_df[['name', 'address']].reset_index(drop=True)}')
-            hotel_seq = input('\nChoose one of the hotels above by its sequence number: ')
+            hotel_seq = input('\nEscolha um dos hotéis acima através de seu sequencial: ')
             return int(hotel_seq)+1
     
-    def update_hotel_total_rooms(self, id, op='increment'):
+    def update_hotel_total_rooms(self, hotel_id, op='increment'):
         df = self.__hotel_repository.read_hotel()
-        df.loc[df['id']==id, 'total_rooms'] += 1 if op == 'increment' else -1
+        df.loc[df['hotel_id']==hotel_id, 'total_rooms'] += 1 if op == 'increment' else -1
         self.__hotel_repository.update_hotel(df)
 
     def add_new_room_to_hotel(self, hotel_id, room_id, floor, room_type, daily_rate):
@@ -58,9 +58,13 @@ class HotelService():
         # deletar reservas        
         # deletar reservas        
         # deletar reservas        
-        self.__hotel_repository.delete_hotel(id=id)
+        self.__hotel_repository.delete_hotel(hotel_id=hotel_id)
 
     def rename_hotel(self, hotel_id, new_name):
         df = self.__hotel_repository.read_hotel()
-        df.loc[df['id']==id, 'name'] = new_name
+        df.loc[df['hotel_id']==hotel_id, 'name'] = new_name
         self.__hotel_repository.update_hotel(df)
+
+    def remove_room(self, hotel_id, room_id):
+        self.__room_service.remove_room(hotel_id, room_id)
+        self.update_hotel_total_rooms(hotel_id, op='decrement')

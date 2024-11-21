@@ -50,7 +50,7 @@ if __name__ == '__main__':
                 hotel_id = -1
                 if not check_op(hotel_op): 
                     continue
-                elif int(op) in [2, 3, 4, 5]:
+                elif int(hotel_op) in [2, 3, 4, 5]:
                     hotel_id = hotel_service.choose_hotel()
 
                 # Cadastrando um novo hotel
@@ -86,7 +86,9 @@ if __name__ == '__main__':
 
                 # Removendo um quarto
                 elif hotel_op == '4': # Remover um quarto
-                    pass
+                    room_id = input('\nInforme o código do quarto: ')
+                    hotel_service.remove_room(hotel_id, room_id)
+
                 # Removendo um hotel
                 elif hotel_op == '5':
                     hotel_service.delete_hotel_data(hotel_id) 
