@@ -128,13 +128,23 @@ if __name__ == '__main__':
 
                 # Reservar quarto
                 if reserv_op == 1:
-                    print('\nPor favor, preencha os campos abaixo:')
-                    check_in_date = input('> A data de início da reserva (formato DD/MM/AAAA): ')
-                    check_out_date = input('> A data de término da reserva (formato DD/MM/AAAA): ')
-                   
-                    # > Mostrar quartos disponíveis 
-                    reservation_service.show_available_rooms(hotel_id, check_in_date, check_out_date)
-                   
+                    in_progress = True
+                    input_new_dates = False
+                    while in_progress or input_new_dates:
+                        print('\nPor favor, preencha os campos abaixo:')
+                        check_in_date = input('> A data de início da reserva (formato DD/MM/AAAA): ')
+                        check_out_date = input('> A data de término da reserva (formato DD/MM/AAAA): ')
+                    
+                        # > Mostrar quartos disponíveis
+                        room_id = None
+                        while not room_id and not input_new_dates:
+                            room_id = reservation_service.choose_room(hotel_id, check_in_date, check_out_date)
+                            if room_id:
+                                in_progress = False
+                                input_new_dates = False
+                            else:
+                                input_new_dates = (input(f'\nDeseja informar outro intervalo de datas? (S/N): ').upper() == 'S')
+
                 # 2 - Exibir reservas
                 if reserv_op == 2:
                     pass

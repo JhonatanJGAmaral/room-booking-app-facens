@@ -31,6 +31,10 @@ class ReservationService():
             unavailable_rooms = self.get_reservations_by_date_range(check_in_date, check_out_date).loc[:,'room_id']
             rooms_df = rooms_df[~rooms_df['room_id'].isin(unavailable_rooms)]
 
-        print(rooms_df.loc[:, ['room_id', 'floor', 'room_type', 'daily_rate']])
+        print(f'\n{rooms_df.loc[:, ['room_id', 'floor', 'room_type', 'daily_rate']]}')
         
-
+    def choose_room(self, hotel_id, check_in_date, check_out_date):
+        self.show_available_rooms(hotel_id, check_in_date, check_out_date)
+        # choose room
+        room_id = None
+        return room_id

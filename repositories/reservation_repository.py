@@ -13,9 +13,12 @@ class ReservationRepository():
 
     def read_reservation(self):
         reserv_df = self.__utils.read_file('reservations')
-        reserv_df = self.__utils.str_to_date_format(reserv_df, 'check_in_date')
-        reserv_df = self.__utils.str_to_date_format(reserv_df, 'check_out_date')
-        return reserv_df
+        if not reserv_df.empty:
+            reserv_df['check_in_date'] = self.__utils.str_to_date_format(reserv_df, 'check_in_date')
+            reserv_df['check_out_date'] = self.__utils.str_to_date_format(reserv_df, 'check_out_date')
+            return reserv_df
+        else:
+            return pd.DataFrame({'':''})
 
     def update_reservation(self, reservation_df):
         self.__utils.write_file('reservations', reservation_df, 'w')

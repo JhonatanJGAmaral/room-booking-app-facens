@@ -28,7 +28,7 @@ class Utils():
         return datetime.strptime(data_str, "%d/%m/%Y")
 
     def str_to_date_format(self, df, key):
-        return df[key] = pd.to_datetime(df[key])
+        return pd.to_datetime(df[key])
 
     # def extract_yy_mm_dd(self, date_str):
     #     if type(date_str) != str:
