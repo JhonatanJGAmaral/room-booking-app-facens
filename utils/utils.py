@@ -12,6 +12,10 @@ class Utils():
     def dict_to_dataframe(self, dictionary):
         return pd.DataFrame(dictionary, index=[0])
 
+    def format_dataframe(self, df, new_col_names):
+        df = df.rename(columns=new_col_names)
+        return df.reset_index(drop=True).applymap(str).to_string(index=False, justify='left')
+
     def read_file(self, type):
         file_path = f'{self.config.storage_path}/{type}.csv'
         return pd.read_csv(file_path) if not self.empty_file(file_path) else pd.DataFrame()    

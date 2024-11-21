@@ -1,6 +1,7 @@
 from repositories.hotel_repository import HotelRepository 
 from repositories.room_repository import RoomRepository
 from services.room_service import RoomService
+from utils.utils import Utils
 from models.hotel import Hotel
 from models.room import Room
 import pandas as pd
@@ -10,9 +11,15 @@ import pandas as pd
 
 class HotelService():
     def __init__(self):
+        self.__hotel_menu_columns = {'hotel_id': 'Código',
+                                     'name': 'Hotel',
+                                     'address': 'Endereço'}
+        pd.set_option('display.max_rows', 1000)
+        pd.set_option('display.colheader_justify', 'left')
         self.__hotel_repository = HotelRepository()
         self.__room_service = RoomService()
-
+        self.__utils = Utils()
+    
     def get_last_column_val(self, column_key):
         df = self.__hotel_repository.read_hotel()            
         return df[column_key].iloc[-1] if not df.empty else 0
@@ -39,9 +46,18 @@ class HotelService():
         if hotels_df.empty:
             return pd.DataFrame()
         else:
-            print(f'\n{hotels_df[['name', 'address']].reset_index(drop=True)}')
-            hotel_seq = input('\nEscolha um dos hotéis acima através de seu sequencial: ')
-            return int(hotel_seq)+1
+            hotel_codes = list(map(str, hotels_df['hotel_id']))
+            df_to_print = self.__utils.format_dataframe(hotels_df, self.__hotel_menu_columns)
+            print(f'\n{df_to_print}')
+
+            while True:
+                hotel_code = input('\nEscolha um dos hotéis acima através de seu código: ')
+                if hotel_code in hotel_codes:
+                    break
+                else:
+                    print('\n\t< Opção inválida! Informe um código existente. >')
+
+            return int(hotel_code)
     
     def update_hotel_total_rooms(self, hotel_id, op='increment'):
         df = self.__hotel_repository.read_hotel()
