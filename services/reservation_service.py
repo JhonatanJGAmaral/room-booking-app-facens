@@ -1,12 +1,14 @@
 from services.room_service import RoomService
 from repositories.reservation_repository import ReservationRepository
-from datetime import date
+from datetime import datetime
+from utils.utils import Utils
 
 class ReservationService():
 
     def __init__(self):
         self.__reservation_repository = ReservationRepository()
         self.__room_service = RoomService()
+        self.__utils = Utils()
 
     def get_reservations_by_date_range(self, check_in_date, check_out_date):
         reserv_df = self.__reservation_repository.read_reservation()
@@ -18,6 +20,9 @@ class ReservationService():
     # criar uma correspondência para as colunas da reserva e usar a função "format_dataframe" presente nas Utils
     # criar uma correspondência para as colunas da reserva e usar a função "format_dataframe" presente nas Utils
     def show_available_rooms(self, hotel_id, check_in_date=None, check_out_date=None):
+        check_in_date = self.__utils.format_date(check_in_date)
+        check_out_date = self.__utils.format_date(check_out_date)
+
         reserv_df = self.get_reservations_by_date_range(check_in_date, check_out_date)
         new_df = reserv_df[(reserv_df['hotel_id'] == hotel_id) & (reserv_df['canceled'] != True)]
         rooms_df = self.__room_service.get_rooms_by_hotel_id(hotel_id)
