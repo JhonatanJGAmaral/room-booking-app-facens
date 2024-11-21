@@ -21,4 +21,4 @@ class Utils():
         if self.empty_file(file_path):
             df.to_csv(file_path, mode='w', index=False, header=True)
         else:
-            df.to_csv(file_path, mode=mode, index=False, header=False, )
+            df.to_csv(file_path, mode=mode, index=False, header=(mode == 'w'))

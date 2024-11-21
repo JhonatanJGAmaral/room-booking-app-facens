@@ -5,25 +5,32 @@ from models.room import Room
 from repositories.hotel_repository import HotelRepository
 from services.hotel_service import HotelService
 
-# Create the Initials class
+# () Create the Initials class
 
 def show_main_menu():
     return  (f'\n\n{'-' * 50}' '\nROOM BOOKING APP' f'\n{'-' * 50}'
-             '\n\t1 - Manage Hotels'
-             '\n\t2 - Manage Guests'
-             '\n\t3 - Manage Reservations'
-             '\n\t4 - Exit'
-             '\n\nChoose an option above: ')
+             '\n\t1 - Gerenciar Hotéis'
+             '\n\t2 - Gerenciar Hóspedes'
+             '\n\t3 - Gerenciar Reservas'
+             '\n\t4 - Sair'
+             '\n\nEscolha uma das opções acima: ')
 
 def show_hotel_menu():
-    return (f'\n{'-' * 20}' '\nHotel Management' f'\n{'-' * 50}'
-            "\n\t1 - Register a new hotel"
-            "\n\t2 - Change hotel name"
-            "\n\t3 - Register a new room"
-            "\n\t4 - Delete a room"
-            "\n\t5 - Delete hotel record"
-            "\n\t6 - Return to main menu"
-            '\n\nChoose an option above: ')
+    return (f'\n{'-' * 20}' '\nGerenciamento de Hotéis' f'\n{'-' * 20}'
+            "\n\t1 - Cadastrar um novo hotel"
+            "\n\t2 - Mudar o nome do hotel"
+            "\n\t3 - Cadastrar um novo quarto"
+            "\n\t4 - Remover um quarto"
+            "\n\t5 - Deletar cadastro de um hotel"
+            "\n\t6 - Retornar ao menu principal"
+            '\n\nEscolha uma das opções acima: ')
+
+def check_op(op):
+    try:
+        dummy = int(op)
+        return True
+    except ValueError:
+        return False
 
 # def show_registering_hotel_menu(self):
 #     return 
@@ -40,41 +47,49 @@ if __name__ == '__main__':
             while hotel_op != '6':
                 hotel_op = input(show_hotel_menu())
 
-                # Registering a new hotel
+                hotel_id = -1
+                if not check_op(hotel_op): 
+                    continue
+                elif int(op) in [2, 3, 4, 5]:
+                    hotel_id = hotel_service.choose_hotel()
+
+                # Cadastrando um novo hotel
                 if hotel_op == '1':
-                    id = 1 
-                    name = input('\nEnter hotel name: ')
-                    address = input('Enter hotel address: ')
+                    name = input('\nInforme o nome do hotel: ')
+                    address = input('Informe o endereço do hotel: ')
                     total_floors = input('Enter the number of floors: ')
                     rooms_per_floor = input('Enter the number of rooms per floor: ')
                     default_room_type = input('Enter the standard room type: ')
                     default_price = input('Enter the standard room price: ')
 
                     # Data casting
-                    id = int(id)
                     total_floors = int(total_floors)
                     rooms_per_floor = int(rooms_per_floor)
                     default_price = float(default_price)
 
-                    if not hotel_service.create_and_save_hotel(id, name, address, total_floors,
+                    if not hotel_service.create_and_save_hotel(name, address, total_floors,
                                                                rooms_per_floor, default_room_type, 
                                                                default_price):
                         continue
+                # Renomeando um hotel existente
                 elif hotel_op == '2':
+                    new_name = input('\nInforme o novo nome para o hotel: ')
+                    hotel_service.rename_hotel(hotel_id, new_name)  
+
+                # Adicionando um novo quarto
+                elif hotel_op == '3': 
+                    room_id = input('\nInforme o código do quarto: ')
+                    floor = input('Informe o andar do quarto: ')
+                    room_type = input('Informe o tipo do quarto: ')
+                    daily_rate = input('Informe o valor da diária do quarto: ')
+                    hotel_service.add_new_room_to_hotel(hotel_id, room_id, floor, room_type, daily_rate)
+
+                # Removendo um quarto
+                elif hotel_op == '4': # Remover um quarto
                     pass
-                # Adding a new room
-                elif hotel_op == '3':
-                    # (x) show all registered hotels
-                    # (x) choose a hotel by its sequential
-                    # () create the room (and update its table)
-                    # () update the hotel
-                    chosen_hotel = hotel_service.choose_hotel()
-                    # ...
-                    pass
-                elif hotel_op == '4':
-                    pass
+                # Removendo um hotel
                 elif hotel_op == '5':
-                    pass
+                    hotel_service.delete_hotel_data(hotel_id) 
                 elif hotel_op == '6':
                     continue
         elif main_op == '2': # --< Manage Guests >--

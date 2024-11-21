@@ -1,18 +1,18 @@
 class Room():
-    def __init__(self, id_hotel, id_room, floor, room_type, daily_rate):
-        self.__id_hotel = id_hotel
-        self.__id_room = id_room
+    def __init__(self, hotel_id, room_id, floor, room_type, daily_rate):
+        self.__hotel_id = hotel_id
+        self.__room_id = room_id
         self.__floor = floor
         self.__room_type = room_type
         self.__daily_rate = daily_rate
-        
-    @property
-    def id_hotel(self):
-        return self.__id_hotel
 
     @property
-    def id_room(self):
-        return self.__id_room
+    def hotel_id(self):
+        return self.__hotel_id
+
+    @property
+    def room_id(self):
+        return self.__room_id
 
     @property
     def floor(self):

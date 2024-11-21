@@ -23,14 +23,16 @@ class HotelRepository():
         print(f'\nHotel \"{hotel.name}\" successfully created.')      
         return True
 
-    def update_hotel(self):
-        pass
-
-    def delete_hotel(self):
-        pass
-
     def read_hotel(self):
         return self.__utils.read_file('hotels')
+
+    def update_hotel(self, hotel_df):
+        self.__utils.write_file('hotels', hotel_df, 'w')
+
+    def delete_hotel(self, id=None, name='', address=''):
+        df = self.read_hotel()
+        new_df = df[df['id'] != id] if id else df[~((df['name'] == name) & (df['address'] == address))]
+        self.update_hotel(new_df)
 
     def hotel_exists(self, hotel):
         df = self.read_hotel()
