@@ -48,30 +48,32 @@ class MenuOptions():
 #     return 
 
 if __name__ == '__main__':
+    main_op = -1
     menu_options = MenuOptions()
-    hotel_repository = HotelRepository()
     hotel_service = HotelService()
+    hotel_repository = HotelRepository()
     reservation_service = ReservationService()
-    main_op = ''
-    while(main_op != '4'):
+
+    while(main_op != 4):
         main_op = input(menu_options.show_main_menu())
         
-        if not menu_options.check_op(main_op): 
-            continue
+        if not menu_options.check_op(main_op): continue
+        else: main_op = int(main_op)
 
-        if main_op == '1': # --< Manage Hotels >--
-            hotel_op = ''
-            while hotel_op != '6':
+        if main_op == 1: # --< Manage Hotels >--
+            hotel_op = -1
+            while hotel_op != 6:
                 hotel_op = input(menu_options.show_hotel_menu())
 
+                if not menu_options.check_op(hotel_op): continue
+                else: hotel_op = int(hotel_op)
+
                 hotel_id = -1
-                if not menu_options.check_op(hotel_op): 
-                    continue
-                elif int(hotel_op) in [2, 3, 4, 5]:
+                if hotel_op in [2, 3, 4, 5]:
                     hotel_id = hotel_service.choose_hotel()
 
                 # Cadastrando um novo hotel
-                if hotel_op == '1':
+                if hotel_op == 1:
                     name = input('\nInforme o nome do hotel: ')
                     address = input('Informe o endereço do hotel: ')
                     total_floors = input('Enter the number of floors: ')
@@ -89,12 +91,12 @@ if __name__ == '__main__':
                                                                default_price):
                         continue
                 # Renomeando um hotel existente
-                elif hotel_op == '2':
+                elif hotel_op == 2:
                     new_name = input('\nInforme o novo nome para o hotel: ')
                     hotel_service.rename_hotel(hotel_id, new_name)  
 
                 # Adicionando um novo quarto
-                elif hotel_op == '3': 
+                elif hotel_op == 3: 
                     room_id = input('\nInforme o código do quarto: ')
                     floor = input('Informe o andar do quarto: ')
                     room_type = input('Informe o tipo do quarto: ')
@@ -102,42 +104,52 @@ if __name__ == '__main__':
                     hotel_service.add_new_room_to_hotel(hotel_id, room_id, floor, room_type, daily_rate)
 
                 # Removendo um quarto
-                elif hotel_op == '4': # Remover um quarto
+                elif hotel_op == 4: # Remover um quarto
                     room_id = input('\nInforme o código do quarto: ')
                     hotel_service.remove_room(hotel_id, room_id)
 
                 # Removendo um hotel
-                elif hotel_op == '5':
+                elif hotel_op == 5:
                     hotel_service.delete_hotel_data(hotel_id) 
-                elif hotel_op == '6':
+                elif hotel_op == 6:
                     continue
-        elif main_op == '2': # --< Manage Guests >--
+        elif main_op == 2: # --< Manage Guests >--
             pass
-        elif main_op == '3': # --< Manage Reservations >--
-            reserv_op = ''
-            while reserv_op != '5':
+        elif main_op == 3: # --< Manage Reservations >--
+            reserv_op = -1
+            while reserv_op != 5:
                 reserv_op = input(menu_options.show_reservation_menu())
 
-                if not menu_options.check_op(reserv_op): 
-                    continue
-                else:
-                    reserv_op = int(reserv_op)
+                if not menu_options.check_op(reserv_op): continue
+                else: reserv_op = int(reserv_op)
                 
                 if reserv_op in [1, 2, 3]:
                     hotel_id = hotel_service.choose_hotel()
 
                 # Reservar quarto
                 if reserv_op == 1:
-                    reservation_service.show_available_rooms(hotel_id)
+                    print('\nPor favor, preencha os campos abaixo:')
+                    check_in_date = input('> A data de início da reserva (formato DD/MM/AAAA): ')
+                    check_out_date = input('> A data de término da reserva (formato DD/MM/AAAA): ')
+                   
                     # > Mostrar quartos disponíveis 
+                    reservation_service.show_available_rooms(hotel_id, check_in_date, check_out_date)
+                   
+                # 2 - Exibir reservas
                 if reserv_op == 2:
                     pass
+                
+                # 3 - Cancelar reserva
                 if reserv_op == 3:
                     pass
+
+                # 4 - Mostrar gráficos de reservas
                 if reserv_op == 4:
                     pass
+
+                # 5 - Retornar ao menu principal
                 if reserv_op == 5:
                     continue
-        elif main_op == '4': # --< Exit >--
+        elif main_op == 4: # --< Exit >--
             continue
         

@@ -63,3 +63,4 @@ hotel_id,room_id,floor,room_type,daily_rate
 1,0,js,s,s
 0,jd,d,d,d
 2,s,f,h,a
+2,bal01,1,test,34200
