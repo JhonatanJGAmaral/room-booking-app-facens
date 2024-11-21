@@ -20,7 +20,6 @@ class Guest():
             # Se o arquivo não existir, cria um arquivo novo e adiciona o cabeçalho
             with open(self.file_path, 'w', newline='', encoding='UTF-8') as arquivo:
                 writer = csv.writer(arquivo)
-                # Define o cabeçalho
                 header = ['id_guest', 'cpf', 'name_guest', 'date_birth', 'phone']
                 writer.writerow(header)
                 print(f"Cabeçalho adicionado ao arquivo {self.file_path}")
@@ -36,7 +35,7 @@ class Guest():
                         writer = csv.writer(arquivo)
                         header = ['id_guest', 'cpf', 'name_guest', 'date_birth', 'phone']
                         writer.writerow(header)
-                        print(f"Cabeçalho adicionado ao arquivo {self.FILE_PATH}")
+                        print(f"Cabeçalho adicionado ao arquivo {self.file_path}")
                 else:
                     print("O arquivo já possui cabeçalho.")   
         
@@ -50,19 +49,17 @@ class Guest():
     def create_guest_to_csv(self, guest_data):
         guests = self.read_guest()
 
-        if guests:  # Se a lista de convidados não estiver vazia
+        if guests: 
             # Pega o último ID, que está na primeira coluna do último convidado
-            last_id = int(guests[-1][0])  # Pega o ID do último convidado
-            new_id = last_id + 1  # Incrementa o ID
+            last_id = int(guests[-1][0])
+            new_id = last_id + 1 
         else:
-            new_id = 1  # Se não houver convidados, começa com ID 1
-
-        # Adiciona o novo convidado ao dicionário
+            # Se não houver convidados, começa com ID 1
+            new_id = 1 
         new_guest = {
             'id_guest': new_id,
             **guest_data
         }
-
         # Adiciona o novo convidado ao arquivo CSV
         with open(self.file_path, 'a', newline='', encoding='UTF-8') as arquivo:
             writer = csv.writer(arquivo)
@@ -78,7 +75,6 @@ class Guest():
                 rows = list(reader)
 
             header = rows[0]  # Primeiro elemento da lista (cabeçalho)
-            print("Cabeçalho encontrado:", header)  # Exibe o cabeçalho para verificação
             found = False
             for i, row in enumerate(rows[1:], start=1):
                 if row[0] == str(id_to_update):
@@ -128,7 +124,3 @@ class Guest():
         else:
             print("ID não encontrado. Nenhuma linha foi excluída.")
 
-
-
-#new_guest = Guest('12345678900', 'John Doe', '1990-01-01', '555-1234')
-#new_guest.create_guest()

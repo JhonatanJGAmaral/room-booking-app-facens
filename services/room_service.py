@@ -18,4 +18,8 @@ class RoomService():
 
     def remove_room(self, hotel_id, room_id):
         self.__room_repository.delete_room(hotel_id, room_id)
+
+    def get_rooms_by_hotel_id(self, hotel_id):
+        rooms_df = self.__room_repository.read_room()
+        return rooms_df[rooms_df['hotel_id']==hotel_id] if not rooms_df.empty else pd.DataFrame()
     

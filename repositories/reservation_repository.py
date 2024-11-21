@@ -1,3 +1,4 @@
+from utils.utils import Utils
 from models.reservation import Reservation
 
 class ReservationRepository():

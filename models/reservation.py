@@ -4,7 +4,7 @@
 
 class Reservation:
     def __init__(self, reservation_id, hotel_id, room_id, 
-                 guest_id, check_in_date, check_out_date, canceled):
+                 guest_id, check_in_date, check_out_date, canceled: bool):
         self.__reservation_id = reservation_id
         self.__hotel_id = hotel_id
         self.__room_id = room_id
