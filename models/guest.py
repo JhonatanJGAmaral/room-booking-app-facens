@@ -1,9 +1,11 @@
 import csv
 from utils.utils import Utils
-
+import os
 
 class Guest():
-    def __init__(self, id_guest, cpf, name_guest, date_birth, phone):
+    file_path = r'C:\Users\luca.alcalde_simoesp\Desktop\Backup 15.03.24\Projetos\ProjetoHotelPos\room-booking-app-facens\infrastructure\database\guests.csv'
+    
+    def __init__(self, id_guest=None, cpf=None, name_guest=None, date_birth=None, phone=None):
         self.__id_guest = id_guest
         self.__cpf = cpf
         self.__name_guest = name_guest
@@ -12,55 +14,76 @@ class Guest():
         
         self.utils = Utils()
         
-        
-    def create_guest(self, guest_data):
-        try:
+    def preenche_cabecalho(self):
+        # Verifica se o arquivo já existe
+        if not os.path.exists(self.file_path):
+            # Se o arquivo não existir, cria um arquivo novo e adiciona o cabeçalho
+            with open(self.file_path, 'w', newline='', encoding='UTF-8') as arquivo:
+                writer = csv.writer(arquivo)
+                # Define o cabeçalho
+                header = ['id_guest', 'cpf', 'name_guest', 'date_birth', 'phone']
+                writer.writerow(header)
+                print(f"Cabeçalho adicionado ao arquivo {self.file_path}")
+        else:
+            # Se o arquivo existe, verificar se já tem cabeçalho
+            with open(self.file_path, 'r', encoding='UTF-8') as arquivo:
+                reader = csv.reader(arquivo)
+                first_line = next(reader, None)  # Lê a primeira linha
 
-                guests = self.read_guest()
-                # Se o arquivo não estiver vazio, o próximo ID será o ID da última linha + 1
-                if len(guests) > 1:  # Se existir ao menos um convidado, o cabeçalho será pulado
-                    last_id = int(guests[-1][0])  # Pega o último ID
-                    new_id = last_id + 1  # Incrementa o ID
+                # Se não houver cabeçalho, insere um
+                if not first_line or len(first_line) != 5:
+                    with open(self.file_path, 'w', newline='', encoding='UTF-8') as arquivo:
+                        writer = csv.writer(arquivo)
+                        header = ['id_guest', 'cpf', 'name_guest', 'date_birth', 'phone']
+                        writer.writerow(header)
+                        print(f"Cabeçalho adicionado ao arquivo {self.FILE_PATH}")
                 else:
-                    new_id = 1  # Se o arquivo estiver vazio, começa do ID 1
-        except FileNotFoundError:
-                    new_id = 1  # Se o arquivo não existir, começa com ID 1
+                    print("O arquivo já possui cabeçalho.")   
+        
+            
+    def read_guest(self):
+        with open(self.file_path, 'r', encoding='UTF-8') as arquivo:
+            arquivo_csv = arquivo.readlines()[1:]     
+            return list(arquivo_csv)
+        
 
-                # Cria um novo convidado com o ID gerado
+    def create_guest_to_csv(self, guest_data):
+        guests = self.read_guest()
+
+        if guests:  # Se a lista de convidados não estiver vazia
+            # Pega o último ID, que está na primeira coluna do último convidado
+            last_id = int(guests[-1][0])  # Pega o ID do último convidado
+            new_id = last_id + 1  # Incrementa o ID
+        else:
+            new_id = 1  # Se não houver convidados, começa com ID 1
+
+        # Adiciona o novo convidado ao dicionário
         new_guest = {
             'id_guest': new_id,
-            'cpf': guest_data['cpf'],
-            'name_guest': guest_data['name_guest'],
-            'date_birth': guest_data['date_birth'],
-            'phone': guest_data['phone']
+            **guest_data
         }
 
         # Adiciona o novo convidado ao arquivo CSV
-        with open('/guest.csv', 'a', newline='', encoding='UTF-8') as arquivo:
+        with open(self.file_path, 'a', newline='', encoding='UTF-8') as arquivo:
             writer = csv.writer(arquivo)
             writer.writerow([new_guest['id_guest'], new_guest['cpf'], new_guest['name_guest'], 
-                            new_guest['date_birth'], new_guest['phone']])
-        
-        print(f'Convidado {new_guest["name_guest"]} criado com sucesso!')
-        return new_guest
-            
-    def read_guest(self):
-        with open('/guest.csv', 'r', encoding='UTF-8') as arquivo:
-            arquivo_csv = arquivo.readlines()[1:]     
-            return list(arquivo_csv)
+                             new_guest['date_birth'], new_guest['phone']])
 
-    def update_guest(self, id_to_update, updates):
+        return new_guest
+
+    def update_guest_models(self, id_to_update, updates):
         try:
-            with open('guest.csv', 'r', encoding='UTF-8') as arquivo:
+            with open(self.file_path, 'r', encoding='UTF-8') as arquivo:
                 reader = csv.reader(arquivo)
                 rows = list(reader)
 
-            header = rows[0] 
+            header = rows[0]  # Primeiro elemento da lista (cabeçalho)
+            print("Cabeçalho encontrado:", header)  # Exibe o cabeçalho para verificação
             found = False
             for i, row in enumerate(rows[1:], start=1):
                 if row[0] == str(id_to_update):
                     for key, value in updates.items():
-                        if key in ['cpf', 'name_guest', 'date_birth', 'phone']:
+                        if key in header:  # Verifique se a chave existe no cabeçalho
                             index = header.index(key)
                             row[index] = value
                     rows[i] = row
@@ -68,19 +91,18 @@ class Guest():
                     break
 
             if found:
-                with open('guest.csv', 'w', newline='', encoding='UTF-8') as arquivo:
+                with open(self.file_path, 'w', newline='', encoding='UTF-8') as arquivo:
                     writer = csv.writer(arquivo)
                     writer.writerows(rows)
                 print(f"Convidado com ID {id_to_update} atualizado com sucesso.")
             else:
                 print(f"Convidado com ID {id_to_update} não encontrado.")
         except FileNotFoundError:
-            print("Arquivo guest.csv não encontrado.")
-
+            print(f"Arquivo {self.file_path} não encontrado.")
 
     def delete_guest(self, id_delete):
         # Lê o arquivo CSV
-        with open('/guest.csv', 'r', encoding='UTF-8') as arquivo_csv:
+        with open(self.file_path, 'r', encoding='UTF-8') as arquivo_csv:
             reader = csv.reader(arquivo_csv)
             guests = list(reader)
 
@@ -99,7 +121,7 @@ class Guest():
             guests.pop(guest_to_delete)
 
             # Regrava o CSV sem o convidado excluído
-            with open('/guest.csv', 'w', newline='', encoding='UTF-8') as arquivo_csv:
+            with open(self.file_path, 'w', newline='', encoding='UTF-8') as arquivo_csv:
                 writer = csv.writer(arquivo_csv)
                 writer.writerows(guests)
             print(f"Convidado ID {id_delete} excluído com sucesso.")
@@ -108,5 +130,5 @@ class Guest():
 
 
 
-new_guest = Guest('12345678900', 'John Doe', '1990-01-01', '555-1234')
-new_guest.create_guest()
+#new_guest = Guest('12345678900', 'John Doe', '1990-01-01', '555-1234')
+#new_guest.create_guest()
