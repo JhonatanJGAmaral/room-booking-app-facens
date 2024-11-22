@@ -4,7 +4,7 @@ class Room():
         self.__room_id = room_id
         self.__floor = floor
         self.__room_type = room_type
-        self.__daily_rate = daily_rate
+        self.__daily_rate = round(daily_rate, 2)
 
     @property
     def hotel_id(self):

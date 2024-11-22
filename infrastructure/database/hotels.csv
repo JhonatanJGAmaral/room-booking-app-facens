@@ -5,3 +5,6 @@ hotel_id,name,address,total_floors,rooms_per_floor,total_rooms
 5,Fake Hotel 001,Fake Address 001,3,3,9
 6,3,0,0,0,0
 7,3,j,1,1,2
+8,Babuino,ddd,10,3,30
+9,Test,dfd,11,2,22
+10,fdf,sdf,3,4,12

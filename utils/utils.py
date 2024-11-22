@@ -14,6 +14,13 @@ class Utils():
         except ValueError:
             return False
 
+    def is_float(self, values):
+        try:
+            dummy = list(map(float, values))
+            return True
+        except ValueError:
+            return False
+
     def empty_file(self, file_path):
         return os.path.exists(file_path) and os.path.getsize(file_path) <= 0
 

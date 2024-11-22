@@ -2,6 +2,7 @@ from models.guest import Guest
 from models.hotel import Hotel
 from models.reservation import Reservation
 from models.room import Room
+from utils.utils import Utils
 from repositories.hotel_repository import HotelRepository
 from services.hotel_service import HotelService
 from services.reservation_service import ReservationService
@@ -18,7 +19,7 @@ class MenuOptions():
                 '\n\nEscolha uma das opções acima: ')
 
     def show_hotel_menu(self):
-        return (f'\n{'-' * 20}' '\nGerenciamento de Hotéis' f'\n{'-' * 20}'
+        return (f'\n{'-' * 30}' '\nGerenciamento de Hotéis' f'\n{'-' * 30}'
                 "\n\t1 - Cadastrar um novo hotel"
                 "\n\t2 - Mudar o nome do hotel"
                 "\n\t3 - Cadastrar um novo quarto"
@@ -28,7 +29,7 @@ class MenuOptions():
                 '\n\nEscolha uma das opções acima: ')
 
     def show_reservation_menu(self):
-        return (f'\n{'-' * 20}' '\nGerenciamento de Reservas' f'\n{'-' * 20}'
+        return (f'\n{'-' * 30}' '\nGerenciamento de Reservas' f'\n{'-' * 30}'
                 "\n\t1 - Reservar quarto"
                 "\n\t2 - Exibir reservas"
                 "\n\t3 - Cancelar reserva"
@@ -44,11 +45,24 @@ class MenuOptions():
             print('\nOpção inválida! Informe uma das opções presentes no menu.')
             return False
 
+    def repeat_input(self, val_type, input_msg, try_again_msg):
+        val = None
+        while True:
+            val = input(input_msg)
+            if val_type == 'int':
+                if utils.is_int([val]): return int(val)
+            elif val_type == 'float':
+                if utils.is_float([val]): return float(val)
+            else: break
+            print(try_again_msg)
+        return val
+
 # def show_registering_hotel_menu(self):
 #     return 
 
 if __name__ == '__main__':
     main_op = -1
+    utils = Utils()
     menu_options = MenuOptions()
     hotel_service = HotelService()
     hotel_repository = HotelRepository()
@@ -74,17 +88,18 @@ if __name__ == '__main__':
 
                 # Cadastrando um novo hotel
                 if hotel_op == 1:
-                    name = input('\nInforme o nome do hotel: ')
-                    address = input('Informe o endereço do hotel: ')
-                    total_floors = input('Enter the number of floors: ')
-                    rooms_per_floor = input('Enter the number of rooms per floor: ')
-                    default_room_type = input('Enter the standard room type: ')
-                    default_price = input('Enter the standard room price: ')
+                    print('\nPor favor, preencha os campos abaixo:')
+                    name = input('\n> Nome do hotel: ')
+                    address = input('> Endereço do hotel: ')
+                    total_floors = menu_options.repeat_input('int', '> Número de andares: ',
+                                                             '\t< Valor inválido. Informe um valor numérico! >')
 
-                    # Data casting
-                    total_floors = int(total_floors)
-                    rooms_per_floor = int(rooms_per_floor)
-                    default_price = float(default_price)
+                    rooms_per_floor = menu_options.repeat_input('int', '> Número de quartos por andar: ',
+                                                                '\t< Valor inválido. Informe um valor numérico! >')
+
+                    default_room_type = input('> Tipo de quarto padrão: ')
+                    default_price = menu_options.repeat_input('float', '> Valor padrão da diária (R$): ',
+                                                              '\t< Valor inválido. Informe um valor numérico! (ex: 250.50) >')
 
                     if not hotel_service.create_and_save_hotel(name, address, total_floors,
                                                                rooms_per_floor, default_room_type, 
