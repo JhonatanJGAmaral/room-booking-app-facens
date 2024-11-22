@@ -31,8 +31,12 @@ class Utils():
         df = df.rename(columns=new_col_names)
         return df.reset_index(drop=True).applymap(str).to_string(index=False, justify='left')
 
-    def format_date(self, data_str):
-        return datetime.strptime(data_str, "%d/%m/%Y")
+    def format_date(self, data_str):        
+        try:
+            date = datetime.strptime(data_str, "%d/%m/%Y")
+            return date
+        except ValueError:
+            return None
 
     def str_to_date_format(self, df, key):
         return pd.to_datetime(df[key])

@@ -53,6 +53,9 @@ class MenuOptions():
                 if utils.is_int([val]): return int(val)
             elif val_type == 'float':
                 if utils.is_float([val]): return float(val)
+            elif val_type == 'date':
+                converted_date = utils.format_date(val)
+                if converted_date: return converted_date
             else: break
             print(try_again_msg)
         return val
@@ -147,8 +150,12 @@ if __name__ == '__main__':
                     input_new_dates = False
                     while in_progress or input_new_dates:
                         print('\nPor favor, preencha os campos abaixo:')
-                        check_in_date = input('> A data de início da reserva (formato DD/MM/AAAA): ')
-                        check_out_date = input('> A data de término da reserva (formato DD/MM/AAAA): ')
+                        check_in_date = menu_options.repeat_input('date', '> Data de início da reserva (formato DD/MM/AAAA): ',
+                                                                  '\t< Data inválida! >\nInsira novamente: ')
+                        
+                        
+                        check_out_date = menu_options.repeat_input('date', '> A data de término da reserva (formato DD/MM/AAAA): ',
+                                                                   '\t< Data inválida! >\nInsira novamente: ')
                     
                         # > Mostrar quartos disponíveis
                         room_id = None
