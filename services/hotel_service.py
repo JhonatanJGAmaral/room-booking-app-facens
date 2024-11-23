@@ -7,9 +7,6 @@ from models.hotel import Hotel
 from models.room import Room
 import pandas as pd
 
-# () Change the number of floors, rooms per floor, and total number of rooms for each hotel when adding new rooms
-# () Make the "get_hotels_and_addresses" function return the ID as well, but without showing it
-
 class HotelService():
     def __init__(self):
         self.__hotel_menu_columns = {'hotel_id': 'Código',
