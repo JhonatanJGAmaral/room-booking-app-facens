@@ -1,6 +1,2 @@
 reservation_id,hotel_id,room_id,guest_id,check_in_date,check_out_date,canceled
-1,11,101,TSP-003-01,05/12/2024,10/12/2024,False
-2,11,102,TSP-003-01,02/02/2024,02/02/2024,False
-3,11,201,TSP-003-01,02/02/2024,02/02/2024,False
-4,2,jjj,TSP-003-01,02/02/2024,02/02/2024,False
-5,2,bal01,TSP-003-01,02/02/2024,02/02/2024,False
+1,8,1003,TSP-003-01,2024-02-02,2024-02-02,True

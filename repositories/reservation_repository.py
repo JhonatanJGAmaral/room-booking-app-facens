@@ -17,7 +17,6 @@ class ReservationRepository():
                                            ['check_in_date', 'check_out_date']) 
                                         #    dtype_col_and_type={'check_in_date': str, 'check_out_date': str})
         if not reserv_df.empty:
-            print(reserv_df)
             return reserv_df
         else:
             return pd.DataFrame()

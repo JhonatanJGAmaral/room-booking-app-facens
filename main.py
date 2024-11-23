@@ -186,12 +186,12 @@ if __name__ == '__main__':
                         reservation_service.create_and_save_reservation(hotel_id, room_id, guest_cpf, check_in_date, check_out_date)
                 # 2 - Exibir reservas
                 if reserv_op == 2:
-                    pass
+                    hotel_service.show_reservations_by_hotel_id(hotel_id, only_active=True)
                 
                 # 3 - Cancelar reserva
                 if reserv_op == 3:
-                    pass
-
+                    reserv_id = hotel_service.choose_reservation(hotel_id, guest_cpf, only_active=True)
+                    reservation_service.cancel_reserv_by_id(reserv_id)
                 # 4 - Mostrar gráficos de reservas
                 if reserv_op == 4:
                     pass

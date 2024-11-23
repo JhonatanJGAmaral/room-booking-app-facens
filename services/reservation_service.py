@@ -81,9 +81,22 @@ class ReservationService():
         if not df.empty:
             df = df[df['hotel_id']==hotel_id]
             return df
+    
+    def get_reservations_by_hotel_and_guest_ids(self, hotel_id, guest_id):
+        df = self.__reservation_repository.read_reservation()            
+        if not df.empty:
+            df = df[(df['hotel_id']==hotel_id) & (df['guest_id']==guest_id)]
+            return df
 
     def delete_reservations_by_hotel_id(self, hotel_id):
         df = self.get_reservations_by_hotel_id(hotel_id)
         if not df.empty:
-            reserv_id = df.loc[:, 'reservation_id']
-            self.__reservation_repository.delete_reservation(reserv_id)
+            reserv_ids = list(df.loc[:, 'reservation_id'])
+            reserv_ids = list(map(int, reserv_ids))
+            for reserv_id in reserv_ids:
+                self.__reservation_repository.delete_reservation(reserv_id)
+
+    def cancel_reserv_by_id(self, reserv_id):
+        df = self.__reservation_repository.read_reservation()            
+        df.loc[df['reservation_id']==reserv_id, 'canceled'] = True
+        self.__reservation_repository.update_reservation(df)            

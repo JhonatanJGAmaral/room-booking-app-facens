@@ -15,6 +15,11 @@ class HotelService():
         self.__hotel_menu_columns = {'hotel_id': 'Código',
                                      'name': 'Hotel',
                                      'address': 'Endereço'}
+        self.__reserv_full_menu_columns = {'reservation_id': 'Reserva',
+                                           'room_id': 'Quarto', 
+                                           'guest_id': 'ID Hóspede', 
+                                           'check_in_date': 'Data de Check-In', 
+                                           'check_out_date': 'Data de Check-Out'}
         pd.set_option('display.max_rows', 1000)
         pd.set_option('display.colheader_justify', 'left')
         self.__utils = Utils()
@@ -72,11 +77,42 @@ class HotelService():
         self.update_hotel_total_rooms(hotel_id, op='increment')
         return True
 
+    def __show_reservations(self, df):
+        if not df.empty:
+            df = df.loc[:, self.__reserv_full_menu_columns.keys()]
+            df_to_print = self.__utils.format_dataframe(df, self.__reserv_full_menu_columns)
+            print(f'\nReservas realizadas nesse hotel:\n{df_to_print}')
+
+    def show_reservations_by_hotel_id(self, hotel_id, only_active=False):
+        df = self.__reservation_service.get_reservations_by_hotel_id(hotel_id)
+        if only_active:
+            df = df[df['canceled'] != True]
+        self.__show_reservations(df)
+        return df
+
+    def show_reservations_by_hotel_and_guest_ids(self, hotel_id, guest_id, only_active=False):
+        df = self.__reservation_service.get_reservations_by_hotel_and_guest_ids(hotel_id, guest_id)
+        if only_active:
+            df = df[df['canceled'] != True]
+        self.__show_reservations(df)
+        return df
+
+    def choose_reservation(self, hotel_id, guest_id, only_active=False):
+        reservs = self.show_reservations_by_hotel_and_guest_ids(hotel_id, guest_id, only_active)
+        if reservs.empty:
+            print('\nNão há reservas ativas para este usuário, neste hotel.')
+            return -1
+        reserv_ids = list(reservs.loc[:, 'reservation_id'])
+        reserv_ids = list(map(int, reserv_ids))
+        while True:
+            reserv_id = input('\nInforme o código da reserva que deseja cancelar: ')
+            if not self.__utils.is_int([reserv_id]) or int(reserv_id) not in reserv_ids:
+                print(f'\t< Opção inválida! Informe um código existente. >')
+            else:
+                return int(reserv_id)
+
     def delete_hotel_data(self, hotel_id):
-        # df = self.__reservation_service.get_reservations_by_hotel_id(hotel_id)
-        # if not df.empty:
-        #     # montar um novo df passando o nome do hotel e o end e fazendo casting das colunas
-        #     print(f'\nReservas realizadas nesse hotel:\n{df}')
+        self.show_reservations_by_hotel_id(hotel_id)
         self.__room_service.delete_hotel_rooms(hotel_id)
         self.__reservation_service.delete_reservations_by_hotel_id(hotel_id)       
         self.__hotel_repository.delete_hotel(hotel_id=hotel_id)
