@@ -58,3 +58,4 @@ hotel_id,room_id,floor,room_type,daily_rate
 8,1001,10,King Room,1000.0
 8,1002,10,King Room,1000.0
 8,1003,10,King Room,1000.0
+3,jj1,1,King Room,1200

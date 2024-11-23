@@ -1,11 +1,16 @@
 from utils.utils import Utils
+from services.room_service import RoomService
 from services.hotel_service import HotelService
 from services.guest_service import GuestService
 from services.chart_service import ChartService
+from configurations.configurations import Configurations
 from repositories.guest_repository import GuestRepository
 from services.reservation_service import ReservationService
 
 class MenuOptions():
+    def __init__(self):
+        self.__configurations = Configurations()
+
     def show_main_menu(self):
         return  (f'\n\n{'-' * 50}' '\nROOM BOOKING APP' f'\n{'-' * 50}'
                 '\n\t1 - Gerenciar Hotéis'
@@ -64,11 +69,12 @@ if __name__ == '__main__':
     utils = Utils()
     menu_options = MenuOptions()
     hotel_service = HotelService()
+    room_service = RoomService()
     guest_service = GuestService()
     chart_service = ChartService()
-    reservation_service = ReservationService()
-    guest_repository = GuestRepository()
     guest_service = GuestService()
+    guest_repository = GuestRepository()
+    reservation_service = ReservationService()
 
     while(main_op != 4):
         main_op = input(menu_options.show_main_menu())
@@ -114,10 +120,16 @@ if __name__ == '__main__':
 
                 # Adicionando um novo quarto
                 elif hotel_op == 3: 
-                    room_id = input('\nInforme o código do quarto: ')
-                    floor = input('Informe o andar do quarto: ')
-                    room_type = input('Informe o tipo do quarto: ')
-                    daily_rate = input('Informe o valor da diária do quarto: ')
+                    print('\nPor favor, preencha os campos abaixo:')
+                    room_id = input('\n> Código do quarto: ')
+                    floor = input('> Andar do quarto: ')
+                    room_service.show_rooms()
+                    room_type = room_service.choose_room_type()
+                    # daily_rate = input('Informe o valor da diária do quarto: ')
+
+                    daily_rate = menu_options.repeat_input('float', '> Valor da diária do quarto: ',
+                                                           '\t< Valor inválido. Informe um valor numérico! (ex: 250.50) >')
+
                     hotel_service.add_new_room_to_hotel(hotel_id, room_id, floor, room_type, daily_rate)
 
                 # Removendo um quarto
