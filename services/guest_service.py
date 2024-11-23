@@ -1,6 +1,6 @@
 from repositories.guest_repository import GuestRepository
 from utils.utils import Utils
-from models.guest_model import Guest
+from models.guest import Guest
 import pandas as pd
 
 class GuestService():
@@ -34,7 +34,14 @@ class GuestService():
             return pd.DataFrame()
         else:
             return df[['id', 'cpf', 'name']]
-        
+    
+    def guest_exists(self, cpf):
+        guest_df = self.get_guest_and_cpf()
+        if guest_df.empty or guest_df[guest_df['cpf'] == cpf].empty:
+            return False
+        else:
+            return True
+
     def choose_guest(self):
         guest_df = self.get_guest_and_cpf()
         if guest_df.empty:

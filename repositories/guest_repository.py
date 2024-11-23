@@ -1,6 +1,6 @@
 import csv
 from utils.utils import Utils
-from models.guest_model import Guest
+from models.guest import Guest
 
 class GuestRepository():
     def __init__(self):

@@ -52,17 +52,8 @@ hotel_id,room_id,floor,room_type,daily_rate
 5,302,3,King Room,1000.0
 5,303,3,King Room,1000.0
 1,HHH,1,Test Type,100
-1,hhh,dsfdf,33,
-1,jjj,1,1,ss
-1,df,dfd,df,d
 2,jjj,1,kkk,10
 7,101,1,1,1.0
-7,4,d,d,d
-1,,d,d,d
-1,j,d,d,d
-1,0,js,s,s
-0,jd,d,d,d
-2,s,f,h,a
 2,bal01,1,test,34200
 8,101,1,King Room,1000.0
 8,102,1,King Room,1000.0

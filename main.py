@@ -1,10 +1,11 @@
 from models.guest import Guest
 from models.hotel import Hotel
-from models.reservation import Reservation
 from models.room import Room
 from utils.utils import Utils
-from repositories.hotel_repository import HotelRepository
+from models.reservation import Reservation
 from services.hotel_service import HotelService
+from services.guest_service import GuestService
+from repositories.hotel_repository import HotelRepository
 from services.reservation_service import ReservationService
 
 # () Create the Initials class
@@ -56,6 +57,8 @@ class MenuOptions():
             elif val_type == 'date':
                 converted_date = utils.format_date(val)
                 if converted_date: return converted_date
+            elif val_type == 'cpf':
+                return val
             else: break
             print(try_again_msg)
         return val
@@ -68,6 +71,7 @@ if __name__ == '__main__':
     utils = Utils()
     menu_options = MenuOptions()
     hotel_service = HotelService()
+    guest_service = GuestService()
     hotel_repository = HotelRepository()
     reservation_service = ReservationService()
 
@@ -135,6 +139,17 @@ if __name__ == '__main__':
             pass
         elif main_op == 3: # --< Manage Reservations >--
             reserv_op = -1
+
+            valid_cpf = False
+            while not valid_cpf:
+                user_cpf = menu_options.repeat_input('cpf', 'Informe seu CPF: ',
+                                                 '\t< CPF inválido! >\nInsira novamente: ')
+                if guest_service.guest_exists(user_cpf): 
+                    break
+                else:
+                    print('\t< Hóspede não cadastrado >\nInsira novamente: ')
+            guest_cpf = user_cpf
+
             while reserv_op != 5:
                 reserv_op = input(menu_options.show_reservation_menu())
 
@@ -166,7 +181,8 @@ if __name__ == '__main__':
                                 input_new_dates = False
                             else:
                                 input_new_dates = (input(f'\nDeseja informar outro intervalo de datas? (S/N): ').upper() == 'S')
-
+                            
+                        reservation_service.create_and_save_reservation(hotel_id, room_id, guest_cpf, check_in_date, check_out_date)
                 # 2 - Exibir reservas
                 if reserv_op == 2:
                     pass

@@ -33,7 +33,7 @@ class ReservationService():
             rooms_df = rooms_df[~rooms_df['room_id'].isin(unavailable_rooms)]
 
         # displaying 2 decimal fields
-        rooms_df['daily_rate'] = rooms_df['daily_rate'].apply(lambda num: f'{num:.2f}')
+        rooms_df['daily_rate'] = rooms_df['daily_rate'].apply(lambda num: f'{float(num):.2f}')
         rooms_df = rooms_df.loc[:, list(self.__reserv_menu_columns.keys())]
         df_to_print = self.__utils.format_dataframe(rooms_df, self.__reserv_menu_columns)
         print(f'\n{df_to_print}')
@@ -60,8 +60,8 @@ class ReservationService():
     def generate_id(self):
         return self.get_last_column_val('reservation_id') + 1
 
-    def create_and_save_reservation(self, reservation_id, hotel_id, room_id,
-                                    guest_id, check_in_date, check_out_date):
+    def create_and_save_reservation(self, hotel_id, room_id, guest_id, 
+                                    check_in_date, check_out_date):
         reservation_id = self.generate_id()  
         reservation = Reservation(reservation_id, hotel_id, room_id, 
                                   guest_id, check_in_date, check_out_date, False) 
