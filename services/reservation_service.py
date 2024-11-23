@@ -1,3 +1,4 @@
+import pandas as pd
 from datetime import datetime
 from utils.utils import Utils
 from models.reservation import Reservation
@@ -17,32 +18,37 @@ class ReservationService():
 
     def get_reservations_by_date_range(self, check_in_date, check_out_date):
         reserv_df = self.__reservation_repository.read_reservation()
-        # VERIFICAR SE A DATA PRECISARÁ DE VALIDAÇÃO
-        aaa = reserv_df[(reserv_df['check_in_date'] >= check_in_date) & (reserv_df['check_out_date'] <= check_out_date)]
-        print('\n',aaa)
-        return reserv_df[(reserv_df['check_in_date'] >= check_in_date) & (reserv_df['check_out_date'] <= check_out_date)]
+
+        if not reserv_df.empty:
+            # reserv_df = reserv_df[(reserv_df['check_in_date'] >= check_in_date) & (reserv_df['check_out_date'] <= check_out_date)]
+            pass
+        return reserv_df
 
     def show_available_rooms(self, hotel_id, check_in_date=None, check_out_date=None):
-        reserv_df = self.get_reservations_by_date_range(check_in_date, check_out_date)
-        new_df = reserv_df[(reserv_df['hotel_id'] == hotel_id) & (reserv_df['canceled'] != True)]
         rooms_df = self.__room_service.get_rooms_by_hotel_id(hotel_id)
-        
-        # There are reservations for this hotel
-        if not new_df.empty: 
-            unavailable_rooms = self.get_reservations_by_date_range(check_in_date, check_out_date).loc[:,'room_id']
-            rooms_df = rooms_df[~rooms_df['room_id'].isin(unavailable_rooms)]
+        reserv_df = self.get_reservations_by_date_range(check_in_date, check_out_date)
 
-        # displaying 2 decimal fields
-        rooms_df['daily_rate'] = rooms_df['daily_rate'].apply(lambda num: f'{float(num):.2f}')
-        rooms_df = rooms_df.loc[:, list(self.__reserv_menu_columns.keys())]
-        df_to_print = self.__utils.format_dataframe(rooms_df, self.__reserv_menu_columns)
+        if not reserv_df.empty:
+            reserv_df = reserv_df[(reserv_df['hotel_id'] == hotel_id) & (reserv_df['canceled'] != True)]            
+        
+        available_rooms_df = rooms_df
+
+        if not reserv_df.empty:
+            unavailable_rooms = list(reserv_df.loc[:,'room_id'])
+            unavailable_rooms = list(map(str, unavailable_rooms))
+            available_rooms_df = rooms_df[~(rooms_df['room_id'].isin(unavailable_rooms))]
+
+        available_rooms_df['daily_rate'] = available_rooms_df['daily_rate'].map(lambda num: f'{float(num):.2f}')
+        available_rooms_df = available_rooms_df.loc[:, list(self.__reserv_menu_columns.keys())]
+        df_to_print = self.__utils.format_dataframe(available_rooms_df, self.__reserv_menu_columns)
         print(f'\n{df_to_print}')
-        return rooms_df
+
+        return available_rooms_df
 
     def choose_room(self, hotel_id, check_in_date, check_out_date):
         rooms_df = self.show_available_rooms(hotel_id, check_in_date, check_out_date)
-        room_ids = rooms_df.loc[:, 'room_id']
-        
+        room_ids = list(rooms_df.loc[:, 'room_id'])
+
         # choose room
         room_id = None
         while True:
@@ -62,7 +68,22 @@ class ReservationService():
 
     def create_and_save_reservation(self, hotel_id, room_id, guest_id, 
                                     check_in_date, check_out_date):
-        reservation_id = self.generate_id()  
+        reservation_id = self.generate_id()
+        check_in_date = self.__utils.format_date(check_in_date)
+        check_out_date = self.__utils.format_date(check_out_date)
+        
         reservation = Reservation(reservation_id, hotel_id, room_id, 
                                   guest_id, check_in_date, check_out_date, False) 
         return self.__reservation_repository.save(reservation) 
+    
+    def get_reservations_by_hotel_id(self, hotel_id):
+        df = self.__reservation_repository.read_reservation()            
+        if not df.empty:
+            df = df[df['hotel_id']==hotel_id]
+            return df
+
+    def delete_reservations_by_hotel_id(self, hotel_id):
+        df = self.get_reservations_by_hotel_id(hotel_id)
+        if not df.empty:
+            reserv_id = df.loc[:, 'reservation_id']
+            self.__reservation_repository.delete_reservation(reserv_id)

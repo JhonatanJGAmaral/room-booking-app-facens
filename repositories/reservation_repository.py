@@ -1,3 +1,4 @@
+import pandas as pd
 from utils.utils import Utils
 from models.reservation import Reservation
 
@@ -8,17 +9,18 @@ class ReservationRepository():
     def save(self, reservation: Reservation):
         reservation_dict = self.__reservation_to_dict(reservation)
         df = self.__utils.dict_to_dataframe(reservation_dict)
-        self.__utils.write_file('reservation', df, 'a')
+        self.__utils.write_file('reservations', df, 'a')
         print('\nParabéns! Sua reserva foi concluída com sucesso.')      
 
     def read_reservation(self):
-        reserv_df = self.__utils.read_file('reservations')
+        reserv_df = self.__utils.read_file('reservations', 
+                                           ['check_in_date', 'check_out_date']) 
+                                        #    dtype_col_and_type={'check_in_date': str, 'check_out_date': str})
         if not reserv_df.empty:
-            reserv_df['check_in_date'] = self.__utils.str_to_date_format(reserv_df, 'check_in_date')
-            reserv_df['check_out_date'] = self.__utils.str_to_date_format(reserv_df, 'check_out_date')
+            print(reserv_df)
             return reserv_df
         else:
-            return pd.DataFrame({'':''})
+            return pd.DataFrame()
 
     def update_reservation(self, reservation_df):
         self.__utils.write_file('reservations', reservation_df, 'w')

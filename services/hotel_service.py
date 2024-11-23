@@ -1,6 +1,7 @@
 from repositories.hotel_repository import HotelRepository 
 from repositories.room_repository import RoomRepository
 from services.room_service import RoomService
+from services.reservation_service import ReservationService
 from utils.utils import Utils
 from models.hotel import Hotel
 from models.room import Room
@@ -16,9 +17,11 @@ class HotelService():
                                      'address': 'Endereço'}
         pd.set_option('display.max_rows', 1000)
         pd.set_option('display.colheader_justify', 'left')
-        self.__hotel_repository = HotelRepository()
-        self.__room_service = RoomService()
         self.__utils = Utils()
+        self.__room_service = RoomService()
+        self.__hotel_repository = HotelRepository()
+        self.__reservation_service = ReservationService()
+
     
     def get_last_column_val(self, column_key):
         df = self.__hotel_repository.read_hotel()            
@@ -70,10 +73,12 @@ class HotelService():
         return True
 
     def delete_hotel_data(self, hotel_id):
+        # df = self.__reservation_service.get_reservations_by_hotel_id(hotel_id)
+        # if not df.empty:
+        #     # montar um novo df passando o nome do hotel e o end e fazendo casting das colunas
+        #     print(f'\nReservas realizadas nesse hotel:\n{df}')
         self.__room_service.delete_hotel_rooms(hotel_id)
-        # deletar reservas        
-        # deletar reservas        
-        # deletar reservas        
+        self.__reservation_service.delete_reservations_by_hotel_id(hotel_id)       
         self.__hotel_repository.delete_hotel(hotel_id=hotel_id)
 
     def rename_hotel(self, hotel_id, new_name):

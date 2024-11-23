@@ -33,27 +33,22 @@ class Utils():
 
     def format_date(self, data_str):        
         try:
-            date = datetime.strptime(data_str, "%d/%m/%Y")
-            return date
+            date = datetime.strptime(data_str, '%d/%m/%Y')
+            return date.strftime('%d/%m/%Y')
         except ValueError:
             return None
 
-    def str_to_date_format(self, df, key):
-        return pd.to_datetime(df[key])
+    # def str_to_date_format(self, df, key):
+    #     df[key] = pd.to_datetime(df[key], format='%d-%m-%Y', errors='coerce')
+    #     return df
 
-    # def extract_yy_mm_dd(self, date_str):
-    #     if type(date_str) != str:
-    #         date_str = str(date_str)
-    #     sepa = '-' if '-' in date_str else '/'
-    #     year, month, day = separator.split(sepa)
-    #     if not self.is_int([year, month, day]):
-    #         return '01', '01', '0001'
-    #     else:
-    #         return '', '', ''
-
-    def read_file(self, type):
+    def read_file(self, type, date_columns=[], dtype_col_and_type={}):
         file_path = f'{self.config.storage_path}/{type}.csv'
-        return pd.read_csv(file_path) if not self.empty_file(file_path) else pd.DataFrame()    
+        
+        if self.empty_file(file_path):
+            return pd.DataFrame()
+        else:        
+            return pd.read_csv(file_path, parse_dates=date_columns, dtype=dtype_col_and_type)
 
     def write_file(self, type, df, mode='w'):
         file_path = f'{self.config.storage_path}/{type}.csv'

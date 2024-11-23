@@ -1,29 +1,4 @@
 hotel_id,room_id,floor,room_type,daily_rate
-2,101,1,Queen Room,17800.0
-2,102,1,Queen Room,17800.0
-2,103,1,Queen Room,17800.0
-2,104,1,Queen Room,17800.0
-2,105,1,Queen Room,17800.0
-2,201,2,Queen Room,17800.0
-2,202,2,Queen Room,17800.0
-2,203,2,Queen Room,17800.0
-2,204,2,Queen Room,17800.0
-2,205,2,Queen Room,17800.0
-2,301,3,Queen Room,17800.0
-2,302,3,Queen Room,17800.0
-2,303,3,Queen Room,17800.0
-2,304,3,Queen Room,17800.0
-2,305,3,Queen Room,17800.0
-2,401,4,Queen Room,17800.0
-2,402,4,Queen Room,17800.0
-2,403,4,Queen Room,17800.0
-2,404,4,Queen Room,17800.0
-2,405,4,Queen Room,17800.0
-2,501,5,Queen Room,17800.0
-2,502,5,Queen Room,17800.0
-2,503,5,Queen Room,17800.0
-2,504,5,Queen Room,17800.0
-2,505,5,Queen Room,17800.0
 3,101,1,King Room,25600.0
 3,102,1,King Room,25600.0
 3,103,1,King Room,25600.0
@@ -40,7 +15,7 @@ hotel_id,room_id,floor,room_type,daily_rate
 3,402,4,King Room,25600.0
 3,403,4,King Room,25600.0
 3,404,4,King Room,25600.0
-1,XXX,1,XXX,2000
+1,XXX,1,XXX,2000.0
 4,101,1,Twin Room,250.0
 5,101,1,King Room,1000.0
 5,102,1,King Room,1000.0
@@ -51,10 +26,8 @@ hotel_id,room_id,floor,room_type,daily_rate
 5,301,3,King Room,1000.0
 5,302,3,King Room,1000.0
 5,303,3,King Room,1000.0
-1,HHH,1,Test Type,100
-2,jjj,1,kkk,10
+1,HHH,1,Test Type,100.0
 7,101,1,1,1.0
-2,bal01,1,test,34200
 8,101,1,King Room,1000.0
 8,102,1,King Room,1000.0
 8,103,1,King Room,1000.0
@@ -119,3 +92,7 @@ hotel_id,room_id,floor,room_type,daily_rate
 10,302,3,sdf,134.0
 10,303,3,sdf,134.0
 10,304,3,sdf,134.0
+11,101,1,King Room,1200.0
+11,102,1,King Room,1200.0
+11,201,2,King Room,1200.0
+11,202,2,King Room,1200.0
