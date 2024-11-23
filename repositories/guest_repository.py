@@ -1,5 +1,6 @@
 from utils.utils import Utils
 from models.guest import Guest
+import pandas as pd
 
 class GuestRepository():
     def __init__(self):
@@ -17,6 +18,7 @@ class GuestRepository():
         
     def read_guest(self):
         df = self.__utils.read_file('guests')
+        if df.empty: return pd.DataFrame()
         df['cpf'] = df['cpf'].apply(lambda cpf: str(cpf))
         df['phone'] = df['phone'].apply(lambda phone: str(phone))
         return df

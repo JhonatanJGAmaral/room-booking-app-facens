@@ -8,9 +8,6 @@ from repositories.guest_repository import GuestRepository
 from services.reservation_service import ReservationService
 
 class MenuOptions():
-    def __init__(self):
-        self.__configurations = Configurations()
-
     def show_main_menu(self):
         return  (f'\n\n{'-' * 50}' '\nROOM BOOKING APP' f'\n{'-' * 50}'
                 '\n\t1 - Gerenciar Hotéis'
@@ -282,6 +279,7 @@ if __name__ == '__main__':
                 if reserv_op == 3:
                     reserv_id = hotel_service.choose_reservation(hotel_id, guest_cpf, only_active=True)
                     reservation_service.cancel_reserv_by_id(reserv_id)
+
                 # 4 - Mostrar gráficos de reservas
                 if reserv_op == 4:
                     chart_service.show_chart()

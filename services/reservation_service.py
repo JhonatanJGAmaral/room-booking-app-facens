@@ -20,7 +20,8 @@ class ReservationService():
         reserv_df = self.__reservation_repository.read_reservation()
 
         if not reserv_df.empty:
-            reserv_df = reserv_df[(reserv_df['check_in_date'] >= check_in_date) & (reserv_df['check_out_date'] <= check_out_date)]
+            # reserv_df = reserv_df[(reserv_df['check_in_date'] >= check_in_date) & (reserv_df['check_out_date'] <= check_out_date)]
+            pass
         return reserv_df
 
     def show_available_rooms(self, hotel_id, check_in_date=None, check_out_date=None):
@@ -81,6 +82,8 @@ class ReservationService():
         if not df.empty:
             df = df[df['hotel_id']==hotel_id]
             return df
+        else:
+            return pd.DataFrame()
     
     def get_reservations_by_hotel_and_guest_ids(self, hotel_id, guest_id):
         df = self.__reservation_repository.read_reservation()            

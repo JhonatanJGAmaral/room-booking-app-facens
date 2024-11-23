@@ -111,7 +111,7 @@ class HotelService():
     def delete_hotel_data(self, hotel_id):
         self.show_reservations_by_hotel_id(hotel_id)
         self.__room_service.delete_hotel_rooms(hotel_id)
-        self.__reservation_service.delete_reservations_by_hotel_id(hotel_id)       
+        self.__reservation_service.delete_reservations_by_hotel_id(hotel_id)
         self.__hotel_repository.delete_hotel(hotel_id=hotel_id)
 
     def rename_hotel(self, hotel_id, new_name):
