@@ -197,10 +197,9 @@ if __name__ == '__main__':
                 # 4 - Mostrar gráficos de reservas
                 if reserv_op == 4:
                     chart_service.show_chart()
-                    
+
                 # 5 - Retornar ao menu principal
                 if reserv_op == 5:
                     continue
         elif main_op == 4: # --< Exit >--
             continue
-        
