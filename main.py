@@ -1,15 +1,9 @@
-from models.guest import Guest
-from models.hotel import Hotel
-from models.room import Room
 from utils.utils import Utils
-from models.reservation import Reservation
 from services.hotel_service import HotelService
 from services.guest_service import GuestService
 from services.chart_service import ChartService
-from repositories.hotel_repository import HotelRepository
+from repositories.guest_repository import GuestRepository
 from services.reservation_service import ReservationService
-
-# () Create the Initials class
 
 class MenuOptions():
     def show_main_menu(self):
@@ -75,8 +69,9 @@ if __name__ == '__main__':
     hotel_service = HotelService()
     guest_service = GuestService()
     chart_service = ChartService()
-    hotel_repository = HotelRepository()
     reservation_service = ReservationService()
+    guest_repository = GuestRepository()
+    guest_service = GuestService()
 
     while(main_op != 4):
         main_op = input(menu_options.show_main_menu())
@@ -139,7 +134,91 @@ if __name__ == '__main__':
                 elif hotel_op == 6:
                     continue
         elif main_op == 2: # --< Manage Guests >--
-            pass
+            guest_op = -1
+            while guest_op != 6:
+                print(f'\n{"-" * 30}')
+                print('Gerenciamento de Hóspedes')
+                print(f'{"-" * 30}')
+                print("\t1 - Cadastrar um novo hóspede")
+                print("\t2 - Atualizar informações de um hóspede")
+                print("\t3 - Remover um hóspede")
+                print("\t4 - Visualizar todos os hóspedes")
+                print("\t5 - Consultar hóspede")
+                print("\t6 - Retornar ao menu principal")
+                guest_op = input('\nEscolha uma das opções acima: ')
+
+                if not menu_options.check_op(guest_op): continue
+                else: guest_op = int(guest_op)
+
+                # Criar um novo hóspede
+                if guest_op == 1:
+                    while True:
+                        try:
+                            print("\nCadastro de Novo Hóspede")
+                            guest_name = input("Nome: ")
+                            guest_cpf = input("CPF: ").strip()
+                            guest_date_birth = input("Data de nascimento (DD/MM/AAAA): ")
+                            guest_phone = input("Telefone: ")
+
+                            if not guest_service.create_and_save_guest(name=guest_name, cpf=guest_cpf, date_birth=guest_date_birth, phone=guest_phone):
+                                print("\nErro ao cadastrar o hóspede.")
+                            break
+                        except ValueError as e:
+                            print(f"\nErro: {e}")
+
+                # Atualizar informações de um hóspede
+                elif guest_op == 2:
+                    print('\nAtualizar Hóspede')
+                    guest_id = int(input('Informe o ID do hóspede que deseja atualizar: '))
+                    guest_name = input('Novo nome: ')
+                    guest_cpf = input('Novo CPF: ')
+                    guest_date_birth = input('Nova data de nascimento: ')
+                    guest_phone = input('Novo telefone: ')
+                    
+                    # Passa todos os dados para o método update_guest
+                    if not guest_service.update_guest(guest_id, guest_name, guest_cpf, guest_date_birth, guest_phone):
+                        print("\nErro ao atualizar hóspede!")
+                    else:
+                        print("\nHóspede atualizado com sucesso!")
+
+                # Remover um hóspede
+                elif guest_op == 3:                
+                     print('\nRemover Hóspede')
+                     guest_id = int(input('Informe o ID do hóspede: '))
+                     if not guest_service.delete_guest_data(guest_id):
+                        print("\nErro ao remover hóspede! ID não encontrado.")
+                     else:
+                        print("\nHóspede removido com sucesso!")
+
+                # Visualizar todos os hóspedes
+                elif guest_op == 4:
+                    print('\nLista de Hóspedes Cadastrados:')
+                    all_guests = guest_service.get_guest_and_cpf()
+                    if all_guests.empty:
+                        print("\nNenhum hóspede encontrado!")
+                    else:
+                        for _, row in all_guests.iterrows():
+                            print(f"- ID: {row['id']}, Nome: {row['name']}, CPF: {row['cpf']}, Data de Nascimento: {row['date_birth']}, Telefone: {row['phone']} ")
+
+                # Retornar ao menu principal
+                elif guest_op == 5:
+                    print('\nConsultar Hóspede:')
+                    guest_cpf = input('Informe o CPF do hóspede: ')
+                    
+                    # Chama a função para buscar o hóspede pelo CPF
+                    guest_data = guest_service.get_guest_by_cpf(guest_cpf)
+                    
+                    if guest_data is not None:  # Verifica se o hóspede foi encontrado
+                        print("\nInformações do Hóspede Encontrado: \n")
+                        # Exibe as informações do hóspede em formato chave: valor
+                        for key, value in guest_data.items():
+                            print(f"{key}: {value}")
+                    else:
+                        print("\nHóspede não encontrado com o CPF fornecido!")
+                        
+                elif guest_op == 6:
+                    continue
+
         elif main_op == 3: # --< Manage Reservations >--
             reserv_op = -1
 
@@ -147,7 +226,7 @@ if __name__ == '__main__':
             while not valid_cpf:
                 user_cpf = menu_options.repeat_input('cpf', 'Informe seu CPF: ',
                                                  '\t< CPF inválido! >\nInsira novamente: ')
-                if guest_service.guest_exists(user_cpf): 
+                if guest_service.guest_exists(str(user_cpf)): 
                     break
                 else:
                     print('\t< Hóspede não cadastrado >\nInsira novamente: ')
