@@ -56,8 +56,8 @@ class MenuOptions():
                 if utils.is_float([val]): return float(val)
             elif val_type == 'date':
                 converted_date = utils.format_date(val)
-                # if converted_date: return converted_date
-                if converted_date: return val
+                if converted_date: return converted_date
+                # if converted_date: return val
             elif val_type == 'cpf':
                 return val
             else: break

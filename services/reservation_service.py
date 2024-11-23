@@ -19,8 +19,8 @@ class ReservationService():
     def get_reservations_by_date_range(self, check_in_date, check_out_date):
         reserv_df = self.__reservation_repository.read_reservation()
 
-        # if not reserv_df.empty:
-            # reserv_df = reserv_df[(reserv_df['check_in_date'] >= check_in_date) & (reserv_df['check_out_date'] <= check_out_date)]
+        if not reserv_df.empty:
+            reserv_df = reserv_df[(reserv_df['check_in_date'] >= check_in_date) & (reserv_df['check_out_date'] <= check_out_date)]
         return reserv_df
 
     def show_available_rooms(self, hotel_id, check_in_date=None, check_out_date=None):
@@ -29,6 +29,7 @@ class ReservationService():
 
         if not reserv_df.empty:
             reserv_df = reserv_df[(reserv_df['hotel_id'] == hotel_id) & (reserv_df['canceled'] != True)]            
+            print(f'\n\nÉ PARA DAR CERTO: \n{reserv_df}\n\n')
         
         available_rooms_df = rooms_df
 
