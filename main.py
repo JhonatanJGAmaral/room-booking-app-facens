@@ -59,9 +59,6 @@ class MenuOptions():
             print(try_again_msg)
         return val
 
-# def show_registering_hotel_menu(self):
-#     return 
-
 if __name__ == '__main__':
     main_op = -1
     utils = Utils()

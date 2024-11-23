@@ -4,7 +4,7 @@ from models.guest import Guest
 import pandas as pd
 
 class GuestService():
-    def __init__(self, guest_repository=None):
+    def __init__(self):
         self.__guest_menu_columns = {
             'id': 'Código',
             'name': 'Cliente',
@@ -14,7 +14,6 @@ class GuestService():
         pd.set_option('display.colheader_justify', 'left')
         self.__guest_repository = GuestRepository()
         self.__utils = Utils()
-        # self.__guest_repository = guest_repository
         
     def get_last_column_val(self, column_key):
         df = self.__guest_repository.read_guest()
