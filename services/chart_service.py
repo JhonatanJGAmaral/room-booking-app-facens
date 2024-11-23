@@ -14,7 +14,6 @@ class ChartService():
         file_path = f'{self.__config.storage_path}/reservations.csv'
         reservations_df = pd.read_csv(file_path, sep=',', engine='python')
 
-        print('TÁ ASSIM: ', reservations_df)
         reservations_df['check_out_date'] = pd.to_datetime(reservations_df['check_out_date'], format='%d/%m/%Y', errors='coerce')
 
         reservas_ativas = reservations_df[
