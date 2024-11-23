@@ -5,6 +5,7 @@ from utils.utils import Utils
 from models.reservation import Reservation
 from services.hotel_service import HotelService
 from services.guest_service import GuestService
+from services.chart_service import ChartService
 from repositories.hotel_repository import HotelRepository
 from services.reservation_service import ReservationService
 
@@ -73,6 +74,7 @@ if __name__ == '__main__':
     menu_options = MenuOptions()
     hotel_service = HotelService()
     guest_service = GuestService()
+    chart_service = ChartService()
     hotel_repository = HotelRepository()
     reservation_service = ReservationService()
 
@@ -194,8 +196,8 @@ if __name__ == '__main__':
                     reservation_service.cancel_reserv_by_id(reserv_id)
                 # 4 - Mostrar gráficos de reservas
                 if reserv_op == 4:
-                    pass
-
+                    chart_service.show_chart()
+                    
                 # 5 - Retornar ao menu principal
                 if reserv_op == 5:
                     continue

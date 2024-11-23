@@ -29,7 +29,8 @@ class Utils():
 
     def format_dataframe(self, df, new_col_names):
         df = df.rename(columns=new_col_names)
-        return df.reset_index(drop=True).applymap(str).to_string(index=False, justify='left')
+        # return df.reset_index(drop=True).applymap(str).to_string(index=False, justify='left')
+        return df.reset_index(drop=True).map(str).to_string(index=False, justify='left')
 
     def format_date(self, data_str):        
         try:
